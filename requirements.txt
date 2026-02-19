@@ -1,0 +1,10 @@
+langchain
+openai
+pydantic
+python-dotenv
+requests
+pytest
+ipython
+ipykernel
+
+psychopyg2-binary
