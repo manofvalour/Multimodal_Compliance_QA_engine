@@ -21,6 +21,7 @@ logger= logging.getlogger("brand-gurdian")
 logging.basicConfig(level=logging.INFO)
 
 ## NODE 1: Indexer
+## function responsible for converting video to text
 def video_indexer_node(state: VideoAuditState)-> Dict[str, Any]:
     """
     This downloads the youtube video from the url
