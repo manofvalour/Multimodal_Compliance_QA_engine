@@ -17,7 +17,7 @@ from backend.src.graph.state import VideoAuditState, ComplianceIssue
 from backend.src.services.video_indexer import VideoIndexerService
 
 ## configute the logger
-logger= logging.getlogger("brand-gurdian")
+logger= logging.getlogger("brand-guardian")
 logging.basicConfig(level=logging.INFO)
 
 ## NODE 1: Indexer
@@ -36,14 +36,14 @@ def video_indexer_node(state: VideoAuditState)-> Dict[str, Any]:
     local_filename = 'temp_audit_video.mp4'
 
     try:
-        vi_servie = VideoIndexerService()
+        vi_service = VideoIndexerService()
         ##download the video and save to local storage
         if 'youtube.com' in video_url or 'youtu.be' in video_url:
-            local_path = vi_service.downloa_youtube(video_url, output_path=local_filename)
+            local_path = vi_service.download_youtube(video_url, output_path=local_filename)
         else:
             raise Exception("Unsupported video source. Only YouTube videos are supported.")
         
-        ## uploading the videio to azure video indexer and extract insights
+        ## uploading the video to azure video indexer and extract insights
         azure_video_id = vi_service.upload_to_azure_video_indexer(local_path, video_id_input)
         logger.info(f"Video uploaded to Azure Video Indexer with ID: {azure_video_id}")
 
@@ -70,20 +70,20 @@ def video_indexer_node(state: VideoAuditState)-> Dict[str, Any]:
         }
     
 ## Node 2 : Compliance Auditor Node
-def audio_content_node(state: VideoAuditState)-> Dict[str, Any]:
+def audit_content_node(state: VideoAuditState)-> Dict[str, Any]:
     """
     This node takes the transcript and ocr text extracted from the video
     and analyze them to identify potential compliance issues.
     """
 
-    logger.info("----[NODE: Auditior] quering the nowledge base and LLM")
+    logger.info("----[NODE: Auditior] querying the knowledge base and LLM")
     transcript = state.get("transcript", "")
 
     if not transcript:
         logger.warning("No transcript available for analysis.")
         return {
             "final_status": "FAIL",
-            "final_report": "aUDIT SKIPPED BECAUSE VIDEO PROCESSING FAILED (no transcript available for analysis)"
+            "final_report": "Audit skipped because video processing failed(no transcript available for analysis)"
         }
     
     # initialize clients
