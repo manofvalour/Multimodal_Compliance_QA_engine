@@ -118,7 +118,7 @@ def index_docs():
         if all_splits:
             logger.info(f"Uploading {len(all_splits)} chunks to Azure AI Search Index '{index_name}'")
             try:
-                ## azure search accepts batches automatically via this method
+                ## azure search accepts batches automatically via this methodse
                 vector_store.add_documents(documents = all_splits)
                 logger.info("="*60)
                 logger.info("Indexing Complete! Knowledge Base is Ready...")
